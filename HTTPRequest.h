@@ -1,9 +1,7 @@
 //
 //  HTTPRequest.h
-//  babidazes
 //
 //  Created by Samuel Colak on 11/4/11.
-//  Copyright (c) 2011 Im-At-Home BV. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
