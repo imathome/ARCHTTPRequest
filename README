@@ -1,0 +1,14 @@
+About this functionality
+
+As many ppl are aware (in the ios space) ASIHTTPRequest is an outstanding piece of code used by alot of people. Unfortunately for us,
+the creator of the Library (rightly imho) decided to cease continuation of the project due to a number of reasons.
+
+In the (vain) attempt i can even help, i created this simple HTTP facility to query the backend server using a mechanism similar
+to that used by ASIHTTP to assure some degree of continuation.
+
+Its no-where near as detailed as ASI nor is it intended to be (at this point).
+
+All the best,
+Samuel Colak (Lazereth)
+MD+Coder, Im-At-Home BV
+www.im-at-home.com
