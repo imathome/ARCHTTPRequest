@@ -1,12 +1,14 @@
 //
 //  HTTPRequest.h
+//  appcore
 //
-//  Created by Samuel Colak on 11/4/11.
+//  Created by Samuel Colak on 12/14/11.
+//  Copyright (c) 2011 Im-At-Home BV. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
-enum kHTTPCode {
+typedef enum {
     kHTTPCodeUndefined = 0,
     kHTTPCodeContinue = 100,
     kHTTPCodeSwitchingProtocol = 101,
@@ -48,23 +50,16 @@ enum kHTTPCode {
     kHTTPCodeServerServiceUnavailable = 503,
     kHTTPCodeServerGatewayTimeout = 504,
     kHTTPCodeServerHTTPVersionNotSupported = 505
-};
+} kHTTPCode;
 
 @interface HTTPRequest : NSObject <NSURLConnectionDelegate, NSURLConnectionDataDelegate> {
 	
 	NSURL *_URL;
+    NSMutableDictionary *_headers;
 	
-@private
-
-	NSURLConnection *_connection;
-	NSMutableURLRequest *_request;
-    NSInteger _responseCode;
-    NSMutableData *_responseData;
-    BOOL _inProgress;
-    
 }
 
-    @property (nonatomic, retain) NSMutableDictionary *headers;
+    @property (atomic, retain) NSMutableDictionary *headers;
     @property (nonatomic, retain) NSString *contentType;
     @property (nonatomic, retain) NSString *username;
     @property (nonatomic, retain) NSString *password;
@@ -72,10 +67,14 @@ enum kHTTPCode {
 
 	@property (nonatomic, readonly, getter = getURL) NSMutableURLRequest *URL;
 	@property (nonatomic, readonly, getter = getResponseData) NSData *responseData;
-	@property (nonatomic, readonly, getter = getResponseStatusCode) NSInteger responseStatusCode;
+	@property (nonatomic, readonly, getter = getResponseStatusCode) kHTTPCode responseStatusCode;
     @property (nonatomic, readonly, getter = getInProgress) BOOL inProgress;
+    @property (nonatomic, readonly, getter = getResponseSize) int64_t responseSize;
+
+    @property (nonatomic, retain, setter = setSaveToStream:) NSString *saveToStream;
 
     + (HTTPRequest *) requestWithURL:(NSURL *)url;
+	+ (HTTPRequest *) requestWithURL:(NSURL *)url method:(NSString *)method;
 
 	- (id) initWithURL:(NSURL *)url;
     - (id) initWithURL:(NSURL *)url timeout:(float)timeout method:(NSString *)method;
@@ -87,13 +86,22 @@ enum kHTTPCode {
 
 @protocol HTTPRequestDelegate <NSObject>
 
+@required
+
 @optional
+
     - (void) request:(HTTPRequest *)request initialized:(NSURL *) url;
     - (void) request:(HTTPRequest *)request connected:(NSURLResponse *)response;
     - (void) request:(HTTPRequest *)request failed:(NSError *) error;
     - (void) request:(HTTPRequest *)request receivedData:(NSData *)data;
+
+    - (void) request:(HTTPRequest *)request fileDownloaded:(NSString *)filename;
+
     - (void) request:(HTTPRequest *)request receivedChallenge:(NSURLAuthenticationChallenge *)challenge;
     - (void) request:(HTTPRequest *)request authenticationFailed:(NSURLAuthenticationChallenge *)challenge;
+    - (void) request:(HTTPRequest *)request received:(NSInteger)bytes total:(int64_t)total;
+    - (void) request:(HTTPRequest *)request sent:(NSInteger)bytes total:(int64_t)total;
+
 @end
 
 @interface HTTPRequest ()
