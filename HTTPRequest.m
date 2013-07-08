@@ -30,6 +30,7 @@
 @implementation HTTPRequest
 
 	@synthesize delegate;
+	
     @synthesize headers=_headers;
     @synthesize contentType=_contentType;
 

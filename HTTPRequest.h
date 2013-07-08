@@ -52,12 +52,36 @@ typedef enum {
     kHTTPCodeServerHTTPVersionNotSupported = 505
 } kHTTPCode;
 
+@class HTTPRequest;
+
+@protocol HTTPRequestDelegate <NSObject>
+
+@required
+
+@optional
+
+    - (void) request:(HTTPRequest *)request initialized:(NSURL *) url;
+    - (void) request:(HTTPRequest *)request connected:(NSURLResponse *)response;
+    - (void) request:(HTTPRequest *)request failed:(NSError *) error;
+    - (void) request:(HTTPRequest *)request receivedData:(NSData *)data;
+
+    - (void) request:(HTTPRequest *)request fileDownloaded:(NSString *)filename;
+
+    - (void) request:(HTTPRequest *)request receivedChallenge:(NSURLAuthenticationChallenge *)challenge;
+    - (void) request:(HTTPRequest *)request authenticationFailed:(NSURLAuthenticationChallenge *)challenge;
+    - (void) request:(HTTPRequest *)request received:(NSInteger)bytes total:(int64_t)total;
+    - (void) request:(HTTPRequest *)request sent:(NSInteger)bytes total:(int64_t)total;
+
+@end
+
 @interface HTTPRequest : NSObject <NSURLConnectionDelegate, NSURLConnectionDataDelegate> {
 	
 	NSURL *_URL;
     NSMutableDictionary *_headers;
 	
 }
+
+	@property (nonatomic, assign) id<HTTPRequestDelegate> delegate;
 
     @property (atomic, retain) NSMutableDictionary *headers;
     @property (nonatomic, retain) NSString *contentType;
@@ -81,31 +105,5 @@ typedef enum {
 
 	- (void) addRequestHeader:(NSString *)key value:(NSString *)data;
 	- (void) start;
-
-@end
-
-@protocol HTTPRequestDelegate <NSObject>
-
-@required
-
-@optional
-
-    - (void) request:(HTTPRequest *)request initialized:(NSURL *) url;
-    - (void) request:(HTTPRequest *)request connected:(NSURLResponse *)response;
-    - (void) request:(HTTPRequest *)request failed:(NSError *) error;
-    - (void) request:(HTTPRequest *)request receivedData:(NSData *)data;
-
-    - (void) request:(HTTPRequest *)request fileDownloaded:(NSString *)filename;
-
-    - (void) request:(HTTPRequest *)request receivedChallenge:(NSURLAuthenticationChallenge *)challenge;
-    - (void) request:(HTTPRequest *)request authenticationFailed:(NSURLAuthenticationChallenge *)challenge;
-    - (void) request:(HTTPRequest *)request received:(NSInteger)bytes total:(int64_t)total;
-    - (void) request:(HTTPRequest *)request sent:(NSInteger)bytes total:(int64_t)total;
-
-@end
-
-@interface HTTPRequest ()
-
-    @property (retain, nonatomic) id<HTTPRequestDelegate> delegate;
 
 @end
