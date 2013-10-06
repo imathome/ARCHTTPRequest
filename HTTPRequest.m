@@ -81,6 +81,11 @@
 		return _URL;
 	}
 
+	- (NSMutableURLRequest *) getRequest
+	{
+		return _request;
+	}
+	
     - (BOOL) getInProgress
     {
         return _inProgress;

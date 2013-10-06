@@ -89,7 +89,9 @@ typedef enum {
     @property (nonatomic, retain) NSString *password;
     @property (nonatomic, retain) NSData *bodyContent;
 
-	@property (nonatomic, readonly, getter = getURL) NSMutableURLRequest *URL;
+	@property (nonatomic, readonly, getter = getURL) NSURL *URL;
+	@property (nonatomic, readonly, getter = getRequest) NSMutableURLRequest *request;
+	
 	@property (nonatomic, readonly, getter = getResponseData) NSData *responseData;
 	@property (nonatomic, readonly, getter = getResponseStatusCode) kHTTPCode responseStatusCode;
     @property (nonatomic, readonly, getter = getInProgress) BOOL inProgress;
